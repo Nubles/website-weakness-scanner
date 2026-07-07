@@ -1,0 +1,37 @@
+{
+    "$schema": "https://apify.com/schemas/v1/input.ide.json",
+    "title": "Website Weakness Scanner",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "startUrls": {
+            "title": "Website URLs",
+            "type": "array",
+            "description": "Business website homepages to scan for trust, SEO, contact, and conversion weaknesses.",
+            "editor": "requestListSources",
+            "prefill": [
+                {
+                    "url": "https://example.com"
+                }
+            ]
+        },
+        "maxRequestsPerCrawl": {
+            "title": "Max Websites",
+            "type": "integer",
+            "description": "Maximum number of websites to scan.",
+            "default": 50
+        },
+        "requestTimeoutSecs": {
+            "title": "Request Timeout Seconds",
+            "type": "integer",
+            "description": "Maximum time to wait for each website request.",
+            "default": 30
+        },
+        "useProxy": {
+            "title": "Use Apify Proxy",
+            "type": "boolean",
+            "description": "Enable only if your Apify account has Proxy access or target websites block direct requests.",
+            "default": false
+        }
+    }
+}

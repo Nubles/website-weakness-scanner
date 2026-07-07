@@ -1,0 +1,18 @@
+{
+    "$schema": "https://apify.com/schemas/v1/actor.ide.json",
+    "actorSpecification": 1,
+    "name": "website-weakness-scanner",
+    "title": "Website Weakness Scanner",
+    "description": "Scans business websites for sales-ready weakness signals agencies can use in outreach.",
+    "version": "0.1",
+    "meta": {
+        "templateId": "js-crawlee-cheerio",
+        "generatedBy": "codex"
+    },
+    "input": "./input_schema.json",
+    "output": "./output_schema.json",
+    "storages": {
+        "dataset": "./dataset_schema.json"
+    },
+    "dockerfile": "../Dockerfile"
+}
