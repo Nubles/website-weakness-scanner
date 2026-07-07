@@ -1,4 +1,5 @@
-﻿import { createCheerioRouter } from '@crawlee/cheerio';
+import { createCheerioRouter } from '@crawlee/cheerio';
+import { Actor } from 'apify';
 
 import { auditWebsite } from './audit.js';
 
@@ -16,6 +17,7 @@ router.addDefaultHandler(async ({ request, response, body, log, pushData }) => {
     });
 
     await pushData(result);
+    await Actor.charge({ eventName: 'website-audited', count: 1 });
     log.info(`Scanned ${result.severity} severity website`, {
         url: loadedUrl,
         issueCount: result.issueCount,
