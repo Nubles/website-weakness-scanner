@@ -1,4 +1,4 @@
-﻿import { CheerioCrawler, purgeDefaultStorages } from '@crawlee/cheerio';
+import { CheerioCrawler, purgeDefaultStorages } from '@crawlee/cheerio';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import { router } from '../src/routes.js';
@@ -23,6 +23,6 @@ describe('Website Weakness Scanner crawler', () => {
         expect(items[0].url).toContain('example.com');
         expect(items[0].businessName).toContain('Example Domain');
         expect(items[0].issues).toContain('No obvious phone number, email, or contact link found');
-        expect(items[0].quickPitch).toContain('Your website');
+        expect(items[0].quickPitch).toContain('audit of your website');
     }, 30_000);
 });

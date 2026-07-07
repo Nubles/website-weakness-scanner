@@ -1,4 +1,4 @@
-﻿import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { auditWebsite } from '../src/audit.js';
 
@@ -23,7 +23,7 @@ describe('auditWebsite', () => {
             ]),
         );
         expect(result.severity).toBe('high');
-        expect(result.quickPitch).toContain('does not use HTTPS');
+        expect(result.quickPitch).toContain('lacks HTTPS');
     });
 
     it('keeps strong pages low severity and extracts contact signals', () => {
@@ -37,6 +37,9 @@ describe('auditWebsite', () => {
                         <title>Manchester Dental Studio | Private Dentist</title>
                         <meta name="description" content="Book modern private dental care in Manchester with transparent pricing and friendly clinicians.">
                         <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <script type="application/ld+json">{"@context": "https://schema.org"}</script>
+                        <script src="https://www.googletagmanager.com/gtag/js"></script>
+                        <script>fbq('init', '123')</script>
                     </head>
                     <body>
                         <h1>Manchester Dental Studio</h1>

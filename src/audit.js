@@ -1,4 +1,4 @@
-﻿import * as cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 
 const EMAIL_REGEX = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi;
 const PHONE_REGEX = /(?:\+44\s?|0)(?:\d[\s().-]?){9,12}\d/g;
@@ -27,11 +27,48 @@ const getSeverity = (issueCount) => {
 
 const makePitch = (issues) => {
     if (!issues.length) {
-        return 'Your website has the main trust and conversion basics in place. A deeper review could look for speed, SEO, and conversion improvements.';
+        return 'Your website appears to have the critical trust, SEO, and tracking foundations set up properly. Excellent job!';
+    }
+    
+    const pitchParts = [];
+    if (issues.includes('Website does not use HTTPS')) {
+        pitchParts.push('is currently marked as insecure because it lacks HTTPS');
+    }
+    if (issues.includes('Google Analytics or Tag Manager tracking pixel is missing')) {
+        pitchParts.push('is missing Google Tag/Analytics tracking, meaning you are blind to website traffic and visitor conversions');
+    }
+    if (issues.includes('Facebook/Meta Pixel conversion tracker is missing')) {
+        pitchParts.push('lacks a Meta Pixel, which prevents you from running retargeting ads to recapture interested leads');
+    }
+    if (issues.includes('Structured data schema markup is missing')) {
+        pitchParts.push('lacks Schema structured data, making it harder for Google to display rich snippets and list you high in local search results');
+    }
+    if (issues.includes('No obvious phone number, email, or contact link found') || issues.includes('No clear contact, booking, quote, or enquiry call-to-action found')) {
+        pitchParts.push('lacks clear contact options and call-to-action buttons, which hurts your user inquiries and conversion rate');
+    }
+    if (issues.includes('Meta description is missing') || issues.includes('Page title is too short or generic')) {
+        pitchParts.push('has basic SEO setup issues (missing or generic page title/meta descriptions) which hurts organic search click-throughs');
+    }
+    if (issues.includes('Mobile viewport tag is missing')) {
+        pitchParts.push('is missing a mobile viewport tag, making it look broken or hard to use on smartphones');
+    }
+    if (issues.includes('Homepage loaded slowly')) {
+        pitchParts.push('loads slowly, which frustrates visitors and drops your Google Search rankings');
     }
 
-    const highlighted = issues.slice(0, 3).map((issue) => issue.charAt(0).toLowerCase() + issue.slice(1));
-    return `Your website ${highlighted.join(', ')}. Fixing these basics can make it easier for visitors to trust you, contact you, and click through from search results.`;
+    if (pitchParts.length === 0) {
+        const genericIssues = issues.slice(0, 2).map(i => i.toLowerCase());
+        return `I noticed some technical and marketing areas for improvement on your website: it ${genericIssues.join(' and ')}. Fixing these simple things will boost your search visibility and conversion rate.`;
+    }
+
+    const introduction = "I did a quick audit of your website and noticed a few marketing and SEO vulnerabilities: it ";
+    if (pitchParts.length === 1) {
+        return `${introduction}${pitchParts[0]}. Resolving this can immediately help you attract and convert more local clients.`;
+    } else {
+        const firstPart = pitchParts.slice(0, -1).join(', ');
+        const lastPart = pitchParts[pitchParts.length - 1];
+        return `${introduction}${firstPart}, and it ${lastPart}. I can help you resolve these quick-wins to improve your local leads.`;
+    }
 };
 
 export const auditWebsite = ({ url, statusCode, loadTimeMs, html }) => {
@@ -76,6 +113,10 @@ export const auditWebsite = ({ url, statusCode, loadTimeMs, html }) => {
             .filter((linkUrl) => SOCIAL_HOSTS.some((host) => linkUrl.includes(host))),
     );
 
+    const hasSchema = $('script[type="application/ld+json"]').length > 0 || $('[itemscope]').length > 0;
+    const hasGoogleAnalytics = /googletagmanager\.com|google-analytics\.com|gtag\(/i.test(html);
+    const hasMetaPixel = /connect\.facebook\.net\/en_US\/fbevents\.js|fbq\(/i.test(html);
+
     const hasContactSignal = emails.length > 0 || phones.length > 0 || contactUrls.length > 0;
     const hasCta = /book|booking|appointment|quote|enquiry|get in touch|contact us|call now|request/i.test(pageText);
     const issues = [];
@@ -92,6 +133,9 @@ export const auditWebsite = ({ url, statusCode, loadTimeMs, html }) => {
     buildIssue(!hasContactSignal, 'No obvious phone number, email, or contact link found', issues);
     buildIssue(!hasCta, 'No clear contact, booking, quote, or enquiry call-to-action found', issues);
     buildIssue(socialUrls.length === 0, 'No social profile links found', issues);
+    buildIssue(!hasGoogleAnalytics, 'Google Analytics or Tag Manager tracking pixel is missing', issues);
+    buildIssue(!hasMetaPixel, 'Facebook/Meta Pixel conversion tracker is missing', issues);
+    buildIssue(!hasSchema, 'Structured data schema markup is missing', issues);
     buildIssue(/wordpress/i.test(generator), 'WordPress generator tag is exposed', issues);
     buildIssue(/jquery-1\.|jquery-2\./i.test(html), 'Old jQuery version may be in use', issues);
 

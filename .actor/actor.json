@@ -1,9 +1,9 @@
 {
     "$schema": "https://apify.com/schemas/v1/actor.ide.json",
     "actorSpecification": 1,
-    "name": "website-weakness-scanner",
-    "title": "Website Weakness Scanner",
-    "description": "Scans business websites for sales-ready weakness signals agencies can use in outreach.",
+    "name": "agency-website-auditor-pro",
+    "title": "Agency Website Auditor Pro",
+    "description": "Scans websites to find missing conversion pixels, structured schema data, SEO weaknesses, and auto-generates B2B cold outreach pitches.",
     "version": "0.1",
     "meta": {
         "templateId": "js-crawlee-cheerio",
