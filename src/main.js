@@ -1,4 +1,4 @@
-﻿import { CheerioCrawler } from '@crawlee/cheerio';
+import { CheerioCrawler } from '@crawlee/cheerio';
 import { Actor } from 'apify';
 
 import { router } from './routes.js';
@@ -10,6 +10,7 @@ const {
     maxRequestsPerCrawl = 50,
     useProxy = false,
     requestTimeoutSecs = 30,
+    enableCharging = false,
 } = (await Actor.getInput()) ?? {};
 
 const proxyConfiguration = useProxy ? await Actor.createProxyConfiguration() : undefined;
@@ -18,7 +19,7 @@ const crawler = new CheerioCrawler({
     proxyConfiguration,
     maxRequestsPerCrawl,
     requestHandlerTimeoutSecs: requestTimeoutSecs,
-    requestHandler: router,
+    requestHandler: router({ enableCharging }),
 });
 
 await crawler.run(startUrls);

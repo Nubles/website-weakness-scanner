@@ -27,6 +27,12 @@
             "description": "Maximum time to wait for each website request.",
             "default": 30
         },
+        "enableCharging": {
+            "title": "Enable Pay-Per-Event Charging",
+            "type": "boolean",
+            "description": "Enable only after Apify Store paid events are configured for this Actor.",
+            "default": false
+        },
         "useProxy": {
             "title": "Use Apify Proxy",
             "type": "boolean",

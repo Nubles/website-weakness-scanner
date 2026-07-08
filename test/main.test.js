@@ -1,4 +1,4 @@
-import { CheerioCrawler, purgeDefaultStorages } from '@crawlee/cheerio';
+﻿import { CheerioCrawler, purgeDefaultStorages } from '@crawlee/cheerio';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import { router } from '../src/routes.js';
@@ -11,7 +11,7 @@ describe('Website Weakness Scanner crawler', () => {
     it('scans a page and stores website weakness fields', async () => {
         const crawler = new CheerioCrawler({
             maxRequestsPerCrawl: 1,
-            requestHandler: router,
+            requestHandler: router(),
         });
 
         await crawler.run(['https://www.example.com']);
